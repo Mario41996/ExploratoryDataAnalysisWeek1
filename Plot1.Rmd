@@ -1,0 +1,94 @@
+---
+title: "Plot1"
+author: "Mario Vigil"
+date: "12/19/2020"
+output: html_document
+---
+
+
+Data and working Directory
+```{r}
+
+PowerCon<- read.table("~/Desktop/Coursera/ExploratoryDataAnalysis/household_power_consumption.txt", header=TRUE,sep=";", na.strings = "?", colClasses = c('character','character','numeric','numeric','numeric','numeric','numeric','numeric','numeric'))
+
+```
+
+
+```{r}
+library(tidyverse)
+```
+
+Format Data:
+
+```{r}
+
+PowerCon$Date <- as.Date(PowerCon$Date, "%d/%m/%Y")
+
+```
+
+Fileter Dates:
+
+```{r}
+PowerCon <- PowerCon %>% 
+        filter(Date >= as.Date("2007-2-1") & Date <= as.Date("2007-2-2"))
+```
+
+Complete Cases:
+
+```{r}
+## Remove incomplete observation
+PowerCon <- PowerCon[complete.cases(PowerCon),]
+
+```
+
+Creating Date Time:
+
+```{r}
+## Combine Date and Time column
+dateTime <- paste(PowerCon$Date, PowerCon$Time)
+
+#view(dateTime)
+
+```
+
+Removing Date and Time
+
+```{r}
+
+PowerCon <- cbind(dateTime, PowerCon)
+
+```
+
+Format 
+
+```{r}
+
+## Format dateTime Column
+PowerCon$dateTime <- as.POSIXct(dateTime)
+
+```
+
+
+
+Plot 1:
+
+Frequency and global active power.
+Bar chart
+
+
+```{r}
+hist(PowerCon$Global_active_power, main = "Global Active Power", xlab = "Global Power Active Power (Kilowatts)",
+     col = "red")
+
+dev.copy(png, "~/Desktop/Coursera/ExploratoryDataAnalysis/plot1.png", width=480, height=480)
+dev.off()
+
+
+```
+
+
+
+
+
+
+
